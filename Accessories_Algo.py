@@ -110,7 +110,7 @@ def round1(df_2):
             #     ,'storeName_receive','productId','productName','Quantity'])
 
             # Initialize pool_3 dataframe to store residual productId and no need to receive => Move to HO
-            pool_3 = pd.DataFrame(columns = ['Area' ,'storeId_HO','storeName_HO', 'Cat2022', 'productId','productName','Quantity'])
+            pool_3 = pd.DataFrame(columns = ['Area' ,'storeId_HO','storeName_HO', 'CatTarget', 'productId','productName','Quantity'])
 
             # start while loop to distribute goods
             while True:
@@ -122,7 +122,7 @@ def round1(df_2):
                     residual_dict = {'Area': pool_1_clone.iloc[0]['Area'],
                                      'storeId_HO': pool_1_clone.iloc[0]['storeId'],
                                      'storeName_HO': pool_1_clone.iloc[0]['storeName'],
-                                     'Cat2022': pool_1_clone.iloc[0]['Cat2022'],
+                                     'CatTarget': pool_1_clone.iloc[0]['CatTarget'],
                                      'productId': pool_1_clone.iloc[0]['productId'],
                                      'productName': pool_1_clone.iloc[0]['productName'],
                                      'Quantity': n}
@@ -154,7 +154,7 @@ def round1(df_2):
                                      'storeName_transfer': pool_1_clone.iloc[0]['storeName'],
                                      'storeId_receive':    cache_trans.iloc[0]['storeId'],
                                      'storeName_receive':  cache_trans.iloc[0]['storeName'],
-                                     'Cat2022' : pool_1_clone.iloc[0]['Cat2022'],
+                                     'CatTarget' : pool_1_clone.iloc[0]['CatTarget'],
                                      'productId':          pool_1_clone.iloc[0]['productId'],
                                      'productName':        pool_1_clone.iloc[0]['productName'],'Quantity': m}
                     # concat to transactions dataframe
@@ -187,7 +187,7 @@ def round1(df_2):
                                      'storeName_transfer': pool_1_clone.iloc[0]['storeName'],
                                      'storeId_receive':    cache_trans.iloc[0]['storeId'],
                                      'storeName_receive':  cache_trans.iloc[0]['storeName'],
-                                     'Cat2022' : pool_1_clone.iloc[0]['Cat2022'],
+                                     'CatTarget' : pool_1_clone.iloc[0]['CatTarget'],
                                      'productId':          pool_1_clone.iloc[0]['productId'],
                                      'productName':        pool_1_clone.iloc[0]['productName'], 'Quantity': n}
                     # Add logs to transactions dataframe
@@ -258,7 +258,7 @@ def round1(df_2):
             #     ,'storeName_receive','productId','productName','Quantity'])
 
             # Initialize pool_3 dataframe to store residual productId and no need to receive => Move to HO
-            pool_3 = pd.DataFrame(columns = ['Area','storeId_HO','storeName_HO', 'Cat2022', 'productId','productName','Quantity'])
+            pool_3 = pd.DataFrame(columns = ['Area','storeId_HO','storeName_HO', 'CatTarget', 'productId','productName','Quantity'])
 
             # start while loop to distribute goods
             while True:
@@ -270,7 +270,7 @@ def round1(df_2):
                     residual_dict = {'Area' : pool_1_clone.iloc[0]['Area'],
                                      'storeId_HO': pool_1_clone.iloc[0]['storeId'],
                                      'storeName_HO': pool_1_clone.iloc[0]['storeName'],
-                                     'Cat2022': pool_1_clone.iloc[0]['Cat2022'],
+                                     'CatTarget': pool_1_clone.iloc[0]['CatTarget'],
                                      'productId': pool_1_clone.iloc[0]['productId'],
                                      'productName': pool_1_clone.iloc[0]['productName'],
                                      'Quantity': n}
@@ -302,7 +302,7 @@ def round1(df_2):
                                      'storeName_transfer': pool_1_clone.iloc[0]['storeName'],
                                      'storeId_receive':    cache_trans.iloc[0]['storeId'],
                                      'storeName_receive':  cache_trans.iloc[0]['storeName'],
-                                     'Cat2022' : pool_1_clone.iloc[0]['Cat2022'],
+                                     'CatTarget' : pool_1_clone.iloc[0]['CatTarget'],
                                      'productId':          pool_1_clone.iloc[0]['productId'],
                                      'productName':        pool_1_clone.iloc[0]['productName'],'Quantity': m}
                     # concat to transactions dataframe
@@ -335,7 +335,7 @@ def round1(df_2):
                                      'storeName_transfer': pool_1_clone.iloc[0]['storeName'],
                                      'storeId_receive':    cache_trans.iloc[0]['storeId'],
                                      'storeName_receive':  cache_trans.iloc[0]['storeName'],
-                                     'Cat2022' : pool_1_clone.iloc[0]['Cat2022'],
+                                     'CatTarget' : pool_1_clone.iloc[0]['CatTarget'],
                                      'productId':          pool_1_clone.iloc[0]['productId'],
                                      'productName':        pool_1_clone.iloc[0]['productName'], 'Quantity': n}
                     # Add logs to transactions dataframe
@@ -464,7 +464,7 @@ def round2(df_1, df_2):
     province_to_HO = province_to_HO.rename(columns={'storeId_HO': 'storeId', 'storeName_HO': 'storeName', 'Quantity':'StockQuantity'})
     
     ho_goods = pd.concat([df_1, hn_to_HO, hcm_to_HO, province_to_HO], ignore_index= True)
-    ho_goods = ho_goods.groupby(by=['Cat2022','productId', 'productName'])['StockQuantity'].sum()
+    ho_goods = ho_goods.groupby(by=['CatTarget','productId', 'productName'])['StockQuantity'].sum()
     ho_goods = ho_goods.reset_index()
     ho_goods = ho_goods[ho_goods['StockQuantity'] > 0]
     ho_goods = ho_goods.reset_index()
@@ -476,7 +476,7 @@ def round2(df_1, df_2):
     ho_goods['SO3'] = 0
     ho_goods['SO4'] = 0
     ho_goods['AvgSO'] = 0
-    ho_goods = ho_goods.reindex(columns=['Area', 'storeId', 'storeName', 'Cat2022', 'productId', 'productName', 'SO1', 'SO2', 'SO3', 'SO4', 'AvgSO', 'StockQuantity'])
+    ho_goods = ho_goods.reindex(columns=['Area', 'storeId', 'storeName', 'CatTarget', 'productId', 'productName', 'SO1', 'SO2', 'SO3', 'SO4', 'AvgSO', 'StockQuantity'])
 
     # Combine ho_goods data and pool_2_remain (deficient goods) into 1 dataframe
     round2_data = pd.concat([ho_goods, hn_remain, hcm_remain, province_remain], ignore_index= True)
@@ -542,7 +542,7 @@ def round2(df_1, df_2):
                  'storeName_transfer': pool_1.iloc[0]['storeName'],
                  'storeId_receive': cache_trans.iloc[0]['storeId'],
                  'storeName_receive': cache_trans.iloc[0]['storeName'],
-                 'Cat2022' : pool_1.iloc[0]['Cat2022'],
+                 'CatTarget' : pool_1.iloc[0]['CatTarget'],
                  'productId': pool_1.iloc[0]['productId'],
                  'productName': pool_1.iloc[0]['productName'], 'Quantity': m}
 
@@ -574,7 +574,7 @@ def round2(df_1, df_2):
                              'storeName_transfer': pool_1.iloc[0]['storeName'],
                              'storeId_receive':    cache_trans.iloc[0]['storeId'],
                              'storeName_receive':  cache_trans.iloc[0]['storeName'],
-                             'Cat2022' : pool_1.iloc[0]['Cat2022'],
+                             'CatTarget' : pool_1.iloc[0]['CatTarget'],
                              'productId':          pool_1.iloc[0]['productId'],
                              'productName':        pool_1.iloc[0]['productName'], 'Quantity': n}
             # Add logs to transactions dataframe
@@ -697,7 +697,7 @@ def round3(df, df_1, df_2):
 
 
 # define df_2 copy of df (main stocks's df)
-df_2 = df[['Area','storeId','storeName', 'Cat2022', 'productId','productName'
+df_2 = df[['Area','storeId','storeName', 'CatTarget', 'productId','productName'
     ,'SO1','SO2','SO3','SO4', 'AvgSO','StockQuantity']].copy()
 df_2 = df_2.fillna(0)
 # nomarlize values of AvgSO, If < 0 => 0
